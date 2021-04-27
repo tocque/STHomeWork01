@@ -1,2 +1,2 @@
 # STHomeWork01
-homework in haskell
+homework in scala
