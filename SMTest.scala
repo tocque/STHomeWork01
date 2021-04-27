@@ -315,7 +315,7 @@ object Parser {
             }
             res match {
                 case -1 => // 尝试括号分离
-                    if (tokens.exists(t => t.pattern == "bracket")) {
+                    if (!tokens.exists(t => t.pattern == "bracket")) {
                         throw new QLSyntaxException("invalid experssion")
                     }
                     info += ("type" -> "expr")
@@ -520,8 +520,7 @@ object Parser {
                             "unexpect token: " + whereTokens.head.content
                         )
                     }
-                    whereTokens.drop(1)
-                    children += ("where" -> parseFilters(whereTokens))
+                    children += ("where" -> parseFilters(whereTokens.drop(1)))
                 }
                 // order by:
                 if (!tokens.isEmpty) {
@@ -860,7 +859,7 @@ class StudentManager {
             )
         }
         val judgeExpr = qlAST.children.getOrElse("where", qlAST)
-        val res = data.filter(t => !(qlAST.pattern == "delete" || judge(qlAST, t)))
+        val res = data.filter(t => !(judgeExpr.pattern == "delete" || judge(judgeExpr, t)))
         var affair = data.length - res.length
         data = res
         return affair
